@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>Moochu AI | Clean Air Companion</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <header>
+        <h1>Moochu AI</h1>
+        <p>Your Clean Air Companion</p>
+    </header>
+
+    <main class="container">
+
+        <section class="intro">
+            <h2>Breathe Better. Live Better.</h2>
+            <p>AI-powered urban air quality assistant</p>
+        </section>
+
+        <section class="card">
+            <h2>Check Air Quality</h2>
+
+            <form id="air-quality-form">
+                <label for="city">Enter your city</label>
+                <input type="text" id="city"
+                       placeholder="Example: Chennai"
+                       required>
+
+                <button type="submit">
+                    Check Air Quality
+                </button>
+            </form>
+
+            <p id="status" role="status"></p>
+        </section>
+
+        <section class="card">
+            <h2>Air Quality Index</h2>
+            <h3 id="aqi">--</h3>
+            <p id="aqi-category">
+                Search for a city to get started.
+            </p>
+        </section>
+        
+        <section class="card">
+            <h2>Air Pollution Details</h2>
+
+            <div class="pollutant-grid">
+
+                <div class="pollutant-card">
+                    <h3>PM2.5</h3>
+                    <p class="pollutant-value" id="pm25">--</p>
+                    <span>µg/m³</span>
+                    <p>Fine particulate matter</p>
+                </div>
+                <div class="pollutant-card">
+                    <h3>PM10</h3>
+                    <p class="pollutant-value" id="pm10">--</p>
+                    <span>µg/m³</span>
+                    <p>Coarse particulate matter</p>
+                </div>
+            </div>
+
+            <div class="data-information">
+                <p>
+                    <strong>Data Source:</strong>
+                    <span id="data-source">--</span>
+                </p>
+
+                <p>
+                    <strong>Data Time:</strong>
+                    <span id="last-updated">--</span>
+                </p>
+            </div>
+        </section>
+
+
+        <section class="features">
+            <article class="card">
+                <h3>Indoor Air Care</h3>
+                <p>Improve indoor air quality.</p>
+            </article>
+
+            <article class="card">
+                <h3>Green Commute</h3>
+                <p>Explore low-emission travel.</p>
+            </article>
+
+            <article class="card">
+                <h3>Family Safety</h3>
+                <p>Plan safer daily activities.</p>
+            </article>
+
+            <article class="card">
+                <h3>Environmental Impact</h3>
+                <p>Understand your daily choices.</p>
+            </article>
+        </section>
+
+        <section class="card">
+            <h2>AI Recommendations</h2>
+            <div id="recommendations" aria-live="polite">
+                Personalized advice will appear here.
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Moochu AI | PromptWars Challenge 6</p>
+    </footer>
+
+</body>
+</html>
