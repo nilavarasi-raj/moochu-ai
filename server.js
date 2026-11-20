@@ -85,6 +85,6 @@ app.get('/api/recommendations', async (req, res) => {
 });
 
 // Start Server
-app.listen(PORT, '127.0.0.1', () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Moochu AI running at http://localhost:${PORT}`);
 });
