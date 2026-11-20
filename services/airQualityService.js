@@ -48,6 +48,18 @@ async function getAirQuality(city) {
     const airData = await airResponse.json();
 
     if (!Number.isFinite(airData.current?.us_aqi)) {
+        console.error(
+            'Invalid AQI response:',
+            JSON.stringify({
+                city: location.name,
+                latitude: location.latitude,
+                longitude: location.longitude,
+                current: airData.current,
+                error: airData.error,
+                reason: airData.reason
+            })
+        );
+
         throw new Error('Air quality data unavailable');
     }
 
