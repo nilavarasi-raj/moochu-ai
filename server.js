@@ -36,7 +36,9 @@ app.get('/api/air-quality', async (req, res) => {
 
         res.status(200).json(data);
 
-    } catch (error) {
+    }  catch (error) {
+        console.error('Air Quality Error:', error.message);
+
         const notFound = error.message === 'City not found';
 
         res.status(notFound ? 404 : 502).json({
