@@ -3,6 +3,16 @@
 
 **Breathe Better. Live Better.**
 
+## Live Demo
+
+Moochu AI is deployed on Render and can be accessed online.
+
+Live Application:
+https://moochu-ai.onrender.com
+
+GitHub Repository:
+https://github.com/nilavarasi-raj/moochu-ai
+
 ## Project Overview
 
 Moochu AI is an AI-powered urban air quality monitoring
@@ -58,6 +68,8 @@ city and its air quality conditions.
 | Test Automation | Playwright |
 | Version Control | Git and GitHub |
 | Development IDE | Visual Studio Code |
+| Geocoding | OpenStreetMap Nominatim API |
+| Cloud Deployment | Render |
 
 ## Project Structure
 
