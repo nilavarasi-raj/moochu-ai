@@ -90,29 +90,3 @@ app.get('/api/recommendations', async (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Moochu AI running at http://localhost:${PORT}`);
 });
-
-app.get('/api/test-geocoding', async (req, res) => {
-    try {
-        const response = await fetch(
-            'https://nominatim.openstreetmap.org/search?q=Chennai%2C%20India&format=json&limit=1',
-            {
-                headers: {
-                    'User-Agent': 'MoochuAI/1.0 (development connectivity test)'
-                },
-                signal: AbortSignal.timeout(10000)
-            }
-        );
-
-        res.status(response.status).json({
-            provider: 'Nominatim',
-            status: response.status,
-            reachable: response.ok
-        });
-    } catch (error) {
-        res.status(502).json({
-            provider: 'Nominatim',
-            error: error.message,
-            cause: error.cause?.message || 'unknown'
-        });
-    }
-});
