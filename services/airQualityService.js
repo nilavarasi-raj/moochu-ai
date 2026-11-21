@@ -2,8 +2,11 @@ async function fetchWithRetry(url, label, retries = 3) {
     for (let attempt = 1; attempt <= retries; attempt++) {
         try {
             const response = await fetch(url, {
-                signal: AbortSignal.timeout(10000)
-            });
+                signal: AbortSignal.timeout(10000),
+                headers: {
+                    'User-Agent': 'MoochuAI/1.0 (+https://moochu-ai.onrender.com)'
+            }
+        });
 
             if (response.status === 429 || response.status >= 500) {
                 throw new Error(`HTTP ${response.status}`);
@@ -30,10 +33,7 @@ async function fetchWithRetry(url, label, retries = 3) {
 }
 
 async function getAirQuality(city) {
-    // Find city coordinates
-    // const geoUrl =
-    //     `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en&format=json`;
-
+    
     const cityAliases = {
         bangalore: 'Bengaluru',
         bombay: 'Mumbai',
@@ -45,10 +45,12 @@ async function getAirQuality(city) {
         cityAliases[city.toLowerCase()] || city;
 
     const geoUrl =
-        `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchCity)}&count=10&language=en&format=json`;
+    `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(searchCity)}&format=json&addressdetails=1&limit=10`;
 
-
-    const geoResponse = await fetchWithRetry(geoUrl, 'Geocoding API');
+    const geoResponse = await fetchWithRetry(
+        geoUrl,
+        'Nominatim Geocoding API'
+    );
 
     if (!geoResponse.ok) {
         throw new Error('Location service unavailable');
@@ -56,15 +58,21 @@ async function getAirQuality(city) {
 
     const geoData = await geoResponse.json();
 
-    if (!geoData.results?.length) {
+    if (!Array.isArray(geoData) || geoData.length === 0) {
         throw new Error('City not found');
     }
 
-    //const location = geoData.results[0];
-    const location =
-    geoData.results.find(
-        item => item.country_code === 'IN'
-    ) || geoData.results[0];
+    const selectedLocation =
+        geoData.find(item => item.address?.country_code === 'in') ||
+        geoData[0];
+
+    const location = {
+        name: selectedLocation.name ||
+            selectedLocation.display_name.split(',')[0],
+        country: selectedLocation.address?.country,
+        latitude: Number(selectedLocation.lat),
+        longitude: Number(selectedLocation.lon)
+    };
     // Get air quality data
     const airUrl =
         `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${location.latitude}&longitude=${location.longitude}&current=us_aqi,pm2_5,pm10&timezone=auto`;
