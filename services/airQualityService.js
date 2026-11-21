@@ -1,3 +1,33 @@
+async function fetchWithRetry(url, label, retries = 3) {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+            const response = await fetch(url, {
+                signal: AbortSignal.timeout(10000)
+            });
+
+            if (response.status === 429 || response.status >= 500) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            return response;
+        } catch (error) {
+            console.error(
+                `${label} attempt ${attempt}/${retries} failed:`,
+                error.message,
+                'cause:',
+                error.cause?.message || 'unknown'
+            );
+
+            if (attempt === retries) {
+                throw error;
+            }
+
+            await new Promise(resolve =>
+                setTimeout(resolve, attempt * 1000)
+            );
+        }
+    }
+}
 
 async function getAirQuality(city) {
     // Find city coordinates
@@ -18,7 +48,7 @@ async function getAirQuality(city) {
         `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchCity)}&count=10&language=en&format=json`;
 
 
-    const geoResponse = await fetch(geoUrl);
+    const geoResponse = await fetchWithRetry(geoUrl, 'Geocoding API');
 
     if (!geoResponse.ok) {
         throw new Error('Location service unavailable');
@@ -39,7 +69,7 @@ async function getAirQuality(city) {
     const airUrl =
         `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${location.latitude}&longitude=${location.longitude}&current=us_aqi,pm2_5,pm10&timezone=auto`;
 
-    const airResponse = await fetch(airUrl);
+    const airResponse = await fetchWithRetry(airUrl, 'Air Quality API');
 
     if (!airResponse.ok) {
         throw new Error('Air quality service unavailable');
